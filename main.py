@@ -3,16 +3,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from middleSquares import get_values_ms
+from pylab import rcParams
+
+rcParams['figure.figsize'] = 16, 6.5
 
 # VARS CONSTS:
 # Upgraded dataSize to global...
 _VARS = {'window': False,
          'fig_agg': False,
          'pltFig': False,
-         'dataSize': 60}
-
+         'dataSize': 100,
+         'seed': None,
+         'max_value': 100}
 
 plt.style.use('Solarize_Light2')
+
 
 # Helper Functions
 
@@ -38,7 +43,7 @@ layout = [[sg.Canvas(key='figCanvas', background_color='#FDF6E3')],
                    background_color='#FDF6E3',
                    pad=((0, 0), (10, 0)),
                    text_color='Black'),
-           sg.Slider(range=(4, 1000), orientation='h', size=(34, 20),
+           sg.Slider(range=(10, 10000), orientation='h', size=(34, 20),
                      default_value=_VARS['dataSize'],
                      background_color='#FDF6E3',
                      text_color='Black',
@@ -46,9 +51,12 @@ layout = [[sg.Canvas(key='figCanvas', background_color='#FDF6E3')],
                      enable_events=True),
            sg.Button('Resample',
                      font=AppFont,
-                     pad=((4, 0), (10, 0)))],
+                     pad=((4, 0), (0, 0)), size=(10, 0))],
           # pad ((left, right), (top, bottom))
-          [sg.Button('Exit', font=AppFont, pad=((540, 0), (0, 0)))]]
+          [sg.Input(key='-IN-', pad=((197, 0), (10, 0)), size=(24, 0), text_color='Black', background_color='Grey'),
+           sg.Button('Set seed', font=AppFont, pad=((8, 0), (0, 0)), size=(10, 0)),
+           sg.Button('Set MaxValue', font=AppFont, pad=((8, 0), (0, 0)), size=(10, 0))],
+          [sg.Button('Exit', font=AppFont, pad=((512, 0), (3, 0)), size=(10, 0))]]
 
 _VARS['window'] = sg.Window('Random Samples',
                             layout,
@@ -58,6 +66,7 @@ _VARS['window'] = sg.Window('Random Samples',
                             element_justification="center",
                             background_color='#FDF6E3')
 
+
 # \\  -------- PYSIMPLEGUI -------- //
 
 
@@ -65,10 +74,10 @@ _VARS['window'] = sg.Window('Random Samples',
 
 
 def makeSynthData():
-    # yData = np.random.randint(100, size=_VARS['dataSize'])
-    yData = get_values_ms(seed=3521, size=_VARS['dataSize'], maxValue=100)
+    yData = get_values_ms(seed=_VARS['seed'], size=_VARS['dataSize'], maxValue=_VARS['max_value'])
     xData = np.linspace(0, _VARS['dataSize'],
                         num=_VARS['dataSize'], dtype=int)
+
     return (xData, yData)
 
 
@@ -94,12 +103,28 @@ def updateData(val):
     _VARS['dataSize'] = val
     updateChart()
 
-# \\  -------- PYPLOT -------- //
+
+def updateMaxValue(val):
+    try:
+        _VARS['max_value'] = int(val)
+        updateChart()
+    except ValueError:
+        _VARS['max_value'] = 100
+        updateChart()
+
+
+def updateSeed(val):
+    try:
+        _VARS['seed'] = int(val)
+        updateChart()
+    except ValueError:
+        _VARS['seed'] = None
+        updateChart()
 
 
 drawChart()
 
-# MAIN LOOP
+
 while True:
     event, values = _VARS['window'].read(timeout=200)
     if event == sg.WIN_CLOSED or event == 'Exit':
@@ -108,6 +133,9 @@ while True:
         updateChart()
     elif event == '-Slider-':
         updateData(int(values['-Slider-']))
-        # print(values)
-        # print(int(values['-Slider-']))
+    elif event == 'Set seed':
+        updateSeed(values['-IN-'])
+    elif event == 'Set MaxValue':
+        updateMaxValue(values['-IN-'])
+
 _VARS['window'].close()

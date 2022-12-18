@@ -14,6 +14,8 @@ def get_generator(initial_number=None):
     if not isinstance(initial_number, int):
         raise ValueError("Входное значение не является числом!")
 
+    print(initial_number)
+
     while True:
         square_str = str(initial_number ** 2)
         while True:
@@ -36,11 +38,13 @@ def _get_initial_number():
     return now.microsecond
 
 
-def get_values_ms(seed=None, size=1, maxValue=1):
+def get_values_ms(seed=None, size=1, maxValue=100):
     generator = get_generator(seed)
     values = []
 
     for index, value in (zip(range(size), generator)):
         values.append(value)
 
+    if maxValue == 1:
+        return np.array(values) / 1000000
     return np.array(values) % maxValue
