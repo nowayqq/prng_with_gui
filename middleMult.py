@@ -2,9 +2,11 @@ from datetime import datetime
 import numpy as np
 
 
+mul = 3521
+
+
 def get_generator(initial_number=None):
 
-    # только в случае, когда входное значение отсутствует, сами генерируем первое случайное число
     if initial_number == None:
         initial_number = _get_initial_number()
 
@@ -14,16 +16,16 @@ def get_generator(initial_number=None):
     print(initial_number)
 
     while True:
-        square_str = str(initial_number ** 2)
+        mul_str = str(initial_number * mul)
         while True:
-            if len(square_str) >= 12:
+            if len(mul_str) >= 12:
                 break
-            square_str = "0" + square_str
-            if len(square_str) >= 12:
+            mul_str = "0" + mul_str
+            if len(mul_str) >= 12:
                 break
-            square_str = square_str + "0"
+            mul_str = mul_str + "0"
 
-        initial_number = int(square_str[3:9])
+        initial_number = int(mul_str[3:9])
         yield initial_number
 
 
@@ -33,7 +35,7 @@ def _get_initial_number():
     return now.microsecond
 
 
-def get_values_ms(seed=None, size=1, maxValue=100):
+def get_values_mm(seed=None, size=1, maxValue=100):
     generator = get_generator(seed)
     values = []
 
