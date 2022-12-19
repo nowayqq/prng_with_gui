@@ -23,9 +23,9 @@ def get_generator(initial_number=None):
 
 
 def _get_initial_number():
-    now = int(str(datetime.now().microsecond) + str(datetime.now().second))
+    now = datetime.now().microsecond * datetime.now().second
     while now % 4 != 0:
-        now = int(str(datetime.now().microsecond) + str(datetime.now().second))
+        now = datetime.now().microsecond * datetime.now().second
     return now
 
 
