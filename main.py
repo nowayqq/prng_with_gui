@@ -18,7 +18,8 @@ _VARS = {'window': False,
          'dataSize': 100,
          'seed': None,
          'max_value': 100,
-         'method': 0}
+         'method': 0,
+         'toggle': True}
 
 _METHODS = ['Middle squares', 'Middle multiplications',
             'Mixing', 'Linear congruent']
@@ -67,7 +68,8 @@ layout = [[sg.Canvas(key='figCanvas', background_color='#FDF6E3')],
                      font=AppFont,
                      pad=((4, 200), (0, 0)), size=(10, 0))],
           # pad ((left, right), (top, bottom))
-          [sg.Input(key='-IN-', pad=((197, 0), (10, 0)), size=(25, 0), text_color='Black', background_color='Grey'),
+          [sg.Button('Toggle', font=AppFont, pad=((58, 0), (0, 0)), size=(10, 0)),
+           sg.Input(key='-IN-', pad=((10, 0), (10, 0)), size=(25, 0), text_color='Black', background_color='Grey'),
            sg.Button('Set seed', font=AppFont, pad=((0, 9), (0, 0)), size=(10, 0)),
            sg.Button('Set MaxValue', font=AppFont, pad=((0, 8), (0, 0)), size=(10, 0))],
           [sg.Button('Exit', font=AppFont, pad=((504, 0), (3, 0)), size=(10, 0))]]
@@ -130,9 +132,9 @@ def updateChart():
     plt.clf()
     plt.plot(dataXY[0], dataXY[1], '.k')
     rnd.seed(_VARS['seed'])
-    if (_VARS['max_value'] == 1):
+    if (_VARS['max_value'] == 1) and _VARS['toggle']:
         plt.plot(dataXY[0], [rnd.random() for i in range(_VARS['dataSize'])], '.k', color='orange')
-    else:
+    elif _VARS['toggle']:
         plt.plot(dataXY[0], [rnd.randrange(_VARS['max_value']) for i in range(_VARS['dataSize'])], '.k', color='orange')
     _VARS['fig_agg'] = draw_figure(
         _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
@@ -176,6 +178,14 @@ def updateMethod(val):
         updateChart()
 
 
+def updateToggle():
+    if _VARS['toggle']:
+        _VARS['toggle'] = False
+        updateChart()
+    else:
+        _VARS['toggle'] = True
+        updateChart()
+
 drawChart()
 
 
@@ -193,5 +203,7 @@ while True:
         updateMaxValue(values['-IN-'])
     elif event == '-LIST-':
         updateMethod(values['-LIST-'])
+    elif event == 'Toggle':
+        updateToggle()
 
 _VARS['window'].close()
