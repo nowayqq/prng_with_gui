@@ -27,23 +27,17 @@ _METHODS = ['Middle squares', 'Middle multiplications',
 plt.style.use('Solarize_Light2')
 
 
-# Helper Functions
-
-
 def draw_figure(canvas, figure):
+
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
     figure_canvas_agg.draw()
     figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
     return figure_canvas_agg
 
 
-# \\  -------- PYSIMPLEGUI -------- //
-
 AppFont = 'Any 16'
 SliderFont = 'Any 14'
 sg.theme('black')
-
-# New layout with slider and padding
 
 layout = [[sg.Canvas(key='figCanvas', background_color='#FDF6E3')],
           [sg.Combo(_METHODS, size=(20, 0),
@@ -83,24 +77,19 @@ _VARS['window'] = sg.Window('PRNG',
                             background_color='#FDF6E3')
 
 
-# \\  -------- PYSIMPLEGUI -------- //
-
-
-# \\  -------- PYPLOT -------- //
-
 def chooseMethod(val):
 
     if val == 0:
-        return get_values_ms(seed=_VARS['seed'], size=_VARS['dataSize'], maxValue=_VARS['max_value'])
+        return get_values_ms(seed=_VARS['seed'], size=_VARS['dataSize'], maxvalue=_VARS['max_value'])
 
     if val == 1:
-        return get_values_mm(seed=_VARS['seed'], size=_VARS['dataSize'], maxValue=_VARS['max_value'])
+        return get_values_mm(seed=_VARS['seed'], size=_VARS['dataSize'], maxvalue=_VARS['max_value'])
 
     if val == 2:
-        return get_values_mix(seed=_VARS['seed'], size=_VARS['dataSize'], maxValue=_VARS['max_value'])
+        return get_values_mix(seed=_VARS['seed'], size=_VARS['dataSize'], maxvalue=_VARS['max_value'])
 
     if val == 3:
-        return get_values_lcm(seed=_VARS['seed'], size=_VARS['dataSize'], maxValue=_VARS['max_value'])
+        return get_values_lcm(seed=_VARS['seed'], size=_VARS['dataSize'], maxvalue=_VARS['max_value'])
 
 
 def makeSynthData():
@@ -113,19 +102,21 @@ def makeSynthData():
 
 
 def drawChart():
+
     _VARS['pltFig'] = plt.figure()
     dataXY = makeSynthData()
     plt.plot(dataXY[0], dataXY[1], '.k')
     rnd.seed(_VARS['seed'])
     if (_VARS['max_value'] == 1):
-        plt.plot(dataXY[0], [rnd.random() for i in range(_VARS['dataSize'])], '.k', color='orange')
+        plt.scatter(dataXY[0], [rnd.random() for i in range(_VARS['dataSize'])], color='orange', s=10)
     else:
-        plt.plot(dataXY[0], [rnd.randrange(_VARS['max_value']) for i in range(_VARS['dataSize'])], '.k', color='orange')
+        plt.scatter(dataXY[0], [rnd.randrange(_VARS['max_value']) for i in range(_VARS['dataSize'])], color='orange', s=10)
     _VARS['fig_agg'] = draw_figure(
         _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
 
 
 def updateChart():
+
     _VARS['fig_agg'].get_tk_widget().forget()
     dataXY = makeSynthData()
     # plt.cla()
@@ -133,19 +124,21 @@ def updateChart():
     plt.plot(dataXY[0], dataXY[1], '.k')
     rnd.seed(_VARS['seed'])
     if (_VARS['max_value'] == 1) and _VARS['toggle']:
-        plt.plot(dataXY[0], [rnd.random() for i in range(_VARS['dataSize'])], '.k', color='orange')
+        plt.scatter(dataXY[0], [rnd.random() for i in range(_VARS['dataSize'])], color='orange', s=10)
     elif _VARS['toggle']:
-        plt.plot(dataXY[0], [rnd.randrange(_VARS['max_value']) for i in range(_VARS['dataSize'])], '.k', color='orange')
+        plt.scatter(dataXY[0], [rnd.randrange(_VARS['max_value']) for i in range(_VARS['dataSize'])], color='orange', s=10)
     _VARS['fig_agg'] = draw_figure(
         _VARS['window']['figCanvas'].TKCanvas, _VARS['pltFig'])
 
 
 def updateData(val):
+
     _VARS['dataSize'] = val
     updateChart()
 
 
 def updateMaxValue(val):
+
     try:
         _VARS['max_value'] = int(val)
         updateChart()
@@ -155,6 +148,7 @@ def updateMaxValue(val):
 
 
 def updateSeed(val):
+
     try:
         _VARS['seed'] = int(val)
         updateChart()
@@ -164,6 +158,7 @@ def updateSeed(val):
 
 
 def updateMethod(val):
+
     if val == _METHODS[0]:
         _VARS['method'] = 0
         updateChart()
@@ -179,12 +174,14 @@ def updateMethod(val):
 
 
 def updateToggle():
+
     if _VARS['toggle']:
         _VARS['toggle'] = False
         updateChart()
     else:
         _VARS['toggle'] = True
         updateChart()
+
 
 drawChart()
 
