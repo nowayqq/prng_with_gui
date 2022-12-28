@@ -13,14 +13,20 @@ def get_generator(initial_number=None):
     print('Seed is ' + str(initial_number))
 
     while True:
+
+        initial_number = str(initial_number)
+        if len(initial_number) == 1:
+            initial_number *= 2
+
+        if len(initial_number) < 8:
+            mod = int(8 / len(initial_number))
+            initial_number = int(initial_number)
+            for i in range(mod):
+                initial_number *= initial_number
+        else:
+            initial_number = int(initial_number)
+
         square_str = str(initial_number ** 2)
-        while True:
-            if len(square_str) >= 12:
-                break
-            square_str = "0" + square_str
-            if len(square_str) >= 12:
-                break
-            square_str = square_str + "0"
 
         initial_number = int(square_str[3:9])
         yield initial_number
