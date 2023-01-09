@@ -4,13 +4,20 @@ import numpy as np
 
 def get_generator(initial_number=None):
 
-    if initial_number is None or initial_number % 4 != 0:
+    if initial_number is None:
         initial_number = _get_initial_number()
 
     if not isinstance(initial_number, int):
         raise ValueError("The input value is not a number!")
 
     print('Seed is ' + str(initial_number))
+
+    if len(str(initial_number)) < 4:
+        mod = 4 // len(str(initial_number))
+        mod += 1
+        initial_number = str(initial_number)
+        for i in range(mod):
+            initial_number += str(int(initial_number) ** 2)
 
     while True:
         initial_number = str(initial_number)
