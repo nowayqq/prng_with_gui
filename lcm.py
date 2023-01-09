@@ -4,7 +4,7 @@ import numpy as np
 
 M = 3385574415
 a = 106
-b = 1283
+b = M * 0.21132
 
 
 def get_generator(initial_number=None):
@@ -23,7 +23,7 @@ def get_generator(initial_number=None):
 
 def _get_initial_number():
 
-    return datetime.now().microsecond * datetime.now().second * datetime.now().minute
+    return datetime.now().microsecond
 
 
 def get_values_lcm(seed=None, size=1, maxvalue=1):
