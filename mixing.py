@@ -8,7 +8,7 @@ def get_generator(initial_number=None):
         initial_number = _get_initial_number()
 
     if not isinstance(initial_number, int):
-        raise ValueError("Входное значение не является числом!")
+        raise ValueError("The input value is not a number!")
 
     print('Seed is ' + str(initial_number))
 
@@ -31,7 +31,7 @@ def _get_initial_number():
     return now
 
 
-def get_values_mix(seed=None, size=1, maxvalue=100):
+def get_values_mix(seed=None, size=1, maxvalue=1):
 
     generator = get_generator(seed)
     values = []

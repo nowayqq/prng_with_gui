@@ -4,11 +4,11 @@ import numpy as np
 
 def get_generator(initial_number=None):
 
-    if initial_number == None:
+    if initial_number is None:
         initial_number = _get_initial_number()
 
     if not isinstance(initial_number, int):
-        raise ValueError("Входное значение не является числом!")
+        raise ValueError("The input value is not a number!")
 
     print('Seed is ' + str(initial_number))
 
@@ -34,11 +34,10 @@ def get_generator(initial_number=None):
 
 def _get_initial_number():
 
-    now = datetime.now()
-    return now.microsecond
+    return datetime.now().microsecond
 
 
-def get_values_ms(seed=None, size=1, maxvalue=100):
+def get_values_ms(seed=None, size=1, maxvalue=1):
 
     generator = get_generator(seed)
     values = []
@@ -48,4 +47,4 @@ def get_values_ms(seed=None, size=1, maxvalue=100):
 
     if maxvalue == 1:
         return np.array(values) % 10000 / 10000
-    return np.array(values) % maxvalue
+    return np.array(values) % maxvalue,

@@ -17,9 +17,10 @@ _VARS = {'window': False,
          'pltFig': False,
          'dataSize': 100,
          'seed': None,
-         'max_value': 100,
+         'max_value': 1,
          'method': 0,
-         'toggle': True}
+         'toggle': True,
+         'write_in_file': True}
 
 _METHODS = ['Middle squares', 'Middle multiplications',
             'Mixing', 'Linear congruent']
@@ -105,6 +106,18 @@ def drawChart():
 
     _VARS['pltFig'] = plt.figure()
     dataXY = makeSynthData()
+
+    if _VARS['write_in_file']:
+        with open("samples.txt", "w") as file:
+            file.write("Methods:\n0 - Middle squares,\n"
+                       "1 - Middle multiplications,\n"
+                       "2 - Mixing,\n"
+                       "3 - Linear congruent\n\n"
+                       "Current method: " + str(_VARS['method']) + "\n"
+                       "Sample count: " + str(_VARS['dataSize']) + "\n"
+                       "Samples:\n\n" + np.array2string(dataXY[1],
+                                                        threshold=np.inf))
+
     plt.plot(dataXY[0], dataXY[1], '.k')
     rnd.seed(_VARS['seed'])
     if (_VARS['max_value'] == 1):
@@ -119,6 +132,18 @@ def updateChart():
 
     _VARS['fig_agg'].get_tk_widget().forget()
     dataXY = makeSynthData()
+
+    if _VARS['write_in_file']:
+        with open("samples.txt", "w") as file:
+            file.write("Methods:\n0 - Middle squares,\n"
+                       "1 - Middle multiplications,\n"
+                       "2 - Mixing,\n"
+                       "3 - Linear congruent\n\n"
+                       "Current method: " + str(_VARS['method']) + "\n"
+                       "Sample count: " + str(_VARS['dataSize']) + "\n"
+                       "Samples:\n\n" + np.array2string(dataXY[1],
+                                                        threshold=np.inf))
+
     # plt.cla()
     plt.clf()
     plt.plot(dataXY[0], dataXY[1], '.k')

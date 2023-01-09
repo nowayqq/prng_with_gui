@@ -14,7 +14,7 @@ def get_generator(initial_number=None):
     print('Seed is ' + str(initial_number))
 
     if not isinstance(initial_number, int):
-        raise ValueError("Входное значение не является числом!")
+        raise ValueError("The input value is not a number!")
 
     while True:
         initial_number = ((a * initial_number) + b) % M
@@ -23,11 +23,10 @@ def get_generator(initial_number=None):
 
 def _get_initial_number():
 
-    now = datetime.now().microsecond * datetime.now().second * datetime.now().minute
-    return now
+    return datetime.now().microsecond * datetime.now().second * datetime.now().minute
 
 
-def get_values_lcm(seed=None, size=1, maxvalue=100):
+def get_values_lcm(seed=None, size=1, maxvalue=1):
 
     generator = get_generator(seed)
     values = []
