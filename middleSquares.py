@@ -47,4 +47,4 @@ def get_values_ms(seed=None, size=1, maxvalue=1):
 
     if maxvalue == 1:
         return np.array(values) % 10000 / 10000
-    return np.array(values) % maxvalue,
+    return np.array(values) % maxvalue
